@@ -49,7 +49,7 @@ class SimpleCalc {
     func priorityResult(array : [String]) -> [String] {
         var operationsToReduce = array
         
-        for index in (operationsToReduce.count-1)...1 {
+        for index in stride(from: operationsToReduce.count-2, to: 1, by: -1){
             if operationsToReduce[index] == "x"{
                 
                 let left = Int(operationsToReduce[index-1])!
@@ -62,8 +62,10 @@ class SimpleCalc {
                 default: fatalError("Unknown operator !")
                 }
 
-                operationsToReduce = Array(operationsToReduce.dropFirst(index+1))
-                operationsToReduce.insert("\(result)", at: index)
+                operationsToReduce.remove(at: index+1)
+                operationsToReduce.remove(at: index)
+                operationsToReduce.remove(at: index-1)
+                operationsToReduce.insert("\(result)", at: index-1)
 
             }
         }
