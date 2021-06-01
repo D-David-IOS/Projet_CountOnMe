@@ -51,6 +51,21 @@ class ViewController: UIViewController {
            }
        }
 
+    
+    @IBAction func tappedMultiplication(_ sender: Any) {
+        if simpleCal.canAddOperator {
+            textView.text.append(" x ")
+            simpleCal.textView.append(" x ")
+           } else {
+               let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+               alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+               self.present(alertVC, animated: true, completion: nil)
+           }
+    }
+    
+    
+    
+    
        @IBAction func tappedEqualButton(_ sender: UIButton) {
         guard simpleCal.expressionIsCorrect else {
                let alertVC = UIAlertController(title: "Zéro!", message: "Entrez une expression correcte !", preferredStyle: .alert)

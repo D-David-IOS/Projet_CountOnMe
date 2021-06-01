@@ -19,7 +19,7 @@ class SimpleCalc {
 
     // Error check computed variables
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x"
     }
 
     var expressionHaveEnoughElement: Bool {
@@ -27,7 +27,7 @@ class SimpleCalc {
     }
 
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x"
     }
 
     var expressionHaveResult: Bool {
@@ -42,6 +42,37 @@ class SimpleCalc {
         return number1 - number2
     }
     
+    func multiplication(number1: Int, number2: Int) -> Int {
+        return number1 * number2
+    }
+    
+    func priorityResult(array : [String]) -> [String] {
+        var operationsToReduce = array
+        
+        for index in (operationsToReduce.count-1)...1 {
+            if operationsToReduce[index] == "x"{
+                
+                let left = Int(operationsToReduce[index-1])!
+                let operand = operationsToReduce[index]
+                let right = Int(operationsToReduce[index+1])!
+                
+                let result: Int
+                switch operand {
+                case "x": result = multiplication(number1: left, number2: right)
+                default: fatalError("Unknown operator !")
+                }
+
+                operationsToReduce = Array(operationsToReduce.dropFirst(index+1))
+                operationsToReduce.insert("\(result)", at: index)
+
+            }
+        }
+        
+        return operationsToReduce
+    }
+    
+    
+    
     
     func reduceToResult(array: [String]) -> [String]{
         var operationsToReduce = array
@@ -54,6 +85,7 @@ class SimpleCalc {
             switch operand {
             case "+": result = addition(number1: left, number2: right)
             case "-": result = substraction(number1: left, number2: right)
+            case "x": result = multiplication(number1: left, number2: right)
             default: fatalError("Unknown operator !")
             }
             

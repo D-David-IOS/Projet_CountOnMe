@@ -11,7 +11,12 @@ import XCTest
 
 class SimpleCalcTests: XCTestCase {
 
+    var simpleCal = SimpleCalc()
+    
     func testGivenEntier_WhenAddition_thenResult() {
+        simpleCal.textView = "1+2="
+        let result = simpleCal.reduceToResult(array: simpleCal.elements)
+        XCTAssert(result[0] == "3")
     }
 
 }
