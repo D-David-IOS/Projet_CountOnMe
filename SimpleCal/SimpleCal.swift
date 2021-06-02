@@ -47,4 +47,25 @@ class FunctionTest : XCTestCase {
         let final = simple2.reduceToResult(array: result)
         XCTAssertEqual("10", final[0])
     }
+    
+    var simple3 = SimpleCalc()
+    
+    func testPriorityWithTwoOperator(){
+        simple3.textView = "2 + 1 x 2 + 2 / 3"
+        let result = simple3.priorityResult(array: simple3.elements)
+        print(result)
+        let final = simple3.reduceToResult(array: result)
+        XCTAssertEqual("4", final[0])
+    }
+    
+    var simple4 = SimpleCalc()
+    
+    func testPriorityWith1Operator(){
+        simple4.textView = "4 / 2"
+        let result = simple4.priorityResult(array: simple4.elements)
+        print(result)
+        let final = simple4.reduceToResult(array: result)
+        XCTAssertEqual("2", final[0])
+    }
+    
 }

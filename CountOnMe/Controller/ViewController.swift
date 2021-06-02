@@ -13,20 +13,28 @@ class ViewController: UIViewController {
     @IBOutlet var numberButtons: [UIButton]!
     
     var simpleCal = SimpleCalc()
+    var egal = false
 
     // View actions
        @IBAction func tappedNumberButton(_ sender: UIButton) {
+        egal = true
            guard let numberText = sender.title(for: .normal) else {
-               return
+            return
            }
            
         if simpleCal.expressionHaveResult {
             simpleCal.textView = ""
             textView.text = ""
            }
-           
+        
+        if simpleCal.lastOperatorIsDivision && numberText == "0" {
+            let alertVC = UIAlertController(title: "Zéro!", message: "Vous ne pouvez pas diviser par 0 !", preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alertVC, animated: true, completion: nil)
+        } else {
         simpleCal.textView.append(numberText)
         textView.text.append(numberText)
+        }
        }
        
        @IBAction func tappedAdditionButton(_ sender: UIButton) {
@@ -64,6 +72,17 @@ class ViewController: UIViewController {
     }
     
     
+    @IBAction func tappedDivision(_ sender: Any) {
+        if simpleCal.canAddOperator {
+            textView.text.append(" / ")
+            simpleCal.textView.append(" / ")
+           } else {
+               let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+               alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+               self.present(alertVC, animated: true, completion: nil)
+           }
+        
+    }
     
     
        @IBAction func tappedEqualButton(_ sender: UIButton) {
@@ -78,12 +97,19 @@ class ViewController: UIViewController {
                alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                return self.present(alertVC, animated: true, completion: nil)
            }
-           
-        // Iterate over operations while an operand still here
-        let result = simpleCal.reduceToResult(array: simpleCal.elements)
-           
-        simpleCal.textView.append(" = \(result.first!)")
-        textView.text.append(" = \(result.first!)")
         
+        guard egal else {
+               let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul !", preferredStyle: .alert)
+               alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+               return self.present(alertVC, animated: true, completion: nil)
+           }
+        
+        // Iterate over operations while an operand still here
+        let result = simpleCal.priorityResult(array: simpleCal.elements)
+        let final = simpleCal.reduceToResult(array: result)
+           
+        simpleCal.textView.append(" = \(final.first!)")
+        textView.text.append(" = \(final.first!)")
+        egal = false
        }
    }

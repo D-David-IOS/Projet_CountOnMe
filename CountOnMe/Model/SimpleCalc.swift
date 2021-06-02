@@ -19,15 +19,19 @@ class SimpleCalc {
 
     // Error check computed variables
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
     }
-
+    
+    var lastOperatorIsDivision: Bool {
+        return elements.last == "/"
+    }
+    
     var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
-
+    
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
     }
 
     var expressionHaveResult: Bool {
@@ -46,11 +50,15 @@ class SimpleCalc {
         return number1 * number2
     }
     
+    func division(number1: Int, number2: Int) -> Int {
+        return number1 / number2
+    }
+    
     func priorityResult(array : [String]) -> [String] {
         var operationsToReduce = array
         
-        for index in stride(from: operationsToReduce.count-2, to: 1, by: -1){
-            if operationsToReduce[index] == "x"{
+        for index in stride(from: operationsToReduce.count-2, to: 0, by: -1){
+            if operationsToReduce[index] == "x" || operationsToReduce[index] == "/"{
                 
                 let left = Int(operationsToReduce[index-1])!
                 let operand = operationsToReduce[index]
@@ -59,7 +67,9 @@ class SimpleCalc {
                 let result: Int
                 switch operand {
                 case "x": result = multiplication(number1: left, number2: right)
-                default: fatalError("Unknown operator !")
+                case "/": result = division(number1: left, number2: right)
+                default:
+                    fatalError("Unknown operator !")
                 }
 
                 operationsToReduce.remove(at: index+1)
@@ -72,9 +82,7 @@ class SimpleCalc {
         
         return operationsToReduce
     }
-    
-    
-    
+
     
     func reduceToResult(array: [String]) -> [String]{
         var operationsToReduce = array
@@ -87,7 +95,6 @@ class SimpleCalc {
             switch operand {
             case "+": result = addition(number1: left, number2: right)
             case "-": result = substraction(number1: left, number2: right)
-            case "x": result = multiplication(number1: left, number2: right)
             default: fatalError("Unknown operator !")
             }
             
