@@ -38,22 +38,22 @@ class ViewController: UIViewController {
        }
        
        @IBAction func tappedAdditionButton(_ sender: UIButton) {
-        if simpleCal.canAddOperator {
+        if simpleCal.canAddOperator && !simpleCal.expressionHaveResult {
             textView.text.append(" + ")
             simpleCal.textView.append(" + ")
            } else {
-               let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+               let alertVC = UIAlertController(title: "Zéro!", message: "Vous ne pouvez pas ajouter un opérateur!", preferredStyle: .alert)
                alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                self.present(alertVC, animated: true, completion: nil)
            }
        }
        
        @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        if simpleCal.canAddOperator {
+        if simpleCal.canAddOperator && !simpleCal.expressionHaveResult {
             textView.text.append(" - ")
             simpleCal.textView.append(" - ")
            } else {
-               let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+               let alertVC = UIAlertController(title: "Zéro!", message: "Vous ne pouvez pas ajouter un opérateur!", preferredStyle: .alert)
                alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                self.present(alertVC, animated: true, completion: nil)
            }
@@ -61,11 +61,11 @@ class ViewController: UIViewController {
 
     
     @IBAction func tappedMultiplication(_ sender: Any) {
-        if simpleCal.canAddOperator {
+        if simpleCal.canAddOperator && !simpleCal.expressionHaveResult {
             textView.text.append(" x ")
             simpleCal.textView.append(" x ")
            } else {
-               let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+               let alertVC = UIAlertController(title: "Zéro!", message: "Vous ne pouvez pas ajouter un opérateur!", preferredStyle: .alert)
                alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                self.present(alertVC, animated: true, completion: nil)
            }
@@ -73,11 +73,11 @@ class ViewController: UIViewController {
     
     
     @IBAction func tappedDivision(_ sender: Any) {
-        if simpleCal.canAddOperator {
+        if simpleCal.canAddOperator && !simpleCal.expressionHaveResult {
             textView.text.append(" / ")
             simpleCal.textView.append(" / ")
            } else {
-               let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+               let alertVC = UIAlertController(title: "Zéro!", message: "Vous ne pouvez pas ajouter un opérateur!", preferredStyle: .alert)
                alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                self.present(alertVC, animated: true, completion: nil)
            }
