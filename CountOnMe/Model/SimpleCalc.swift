@@ -19,7 +19,7 @@ class SimpleCalc {
 
     // Error check computed variables
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/" && elements.last != "="
     }
     
     var lastOperatorIsDivision: Bool {
@@ -31,40 +31,40 @@ class SimpleCalc {
     }
     
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/" && elements.last != "=" && !expressionHaveResult && textView != ""
     }
 
     var expressionHaveResult: Bool {
         return textView.firstIndex(of: "=") != nil
     }
 
-    func addition(number1: Int, number2: Int) -> Int {
+    func addition(number1: Double, number2: Double) -> Double {
         return number1 + number2
     }
     
-    func substraction(number1: Int, number2: Int) -> Int {
+    func substraction(number1: Double, number2: Double) -> Double {
         return number1 - number2
     }
     
-    func multiplication(number1: Int, number2: Int) -> Int {
+    func multiplication(number1: Double, number2: Double) -> Double {
         return number1 * number2
     }
     
-    func division(number1: Int, number2: Int) -> Int {
+    func division(number1: Double, number2: Double) -> Double {
         return number1 / number2
     }
     
-    func priorityResult(array : [String]) -> [String] {
+    func reduceToResult(array: [String]) -> [String]{
         var operationsToReduce = array
         
         for index in stride(from: operationsToReduce.count-2, to: 0, by: -1){
             if operationsToReduce[index] == "x" || operationsToReduce[index] == "/"{
                 
-                let left = Int(operationsToReduce[index-1])!
+                let left = Double(operationsToReduce[index-1])!
                 let operand = operationsToReduce[index]
-                let right = Int(operationsToReduce[index+1])!
+                let right = Double(operationsToReduce[index+1])!
                 
-                let result: Int
+                let result: Double
                 switch operand {
                 case "x": result = multiplication(number1: left, number2: right)
                 case "/": result = division(number1: left, number2: right)
@@ -80,32 +80,22 @@ class SimpleCalc {
             }
         }
         
-        return operationsToReduce
-    }
-
-    
-    func reduceToResult(array: [String]) -> [String]{
-        var operationsToReduce = array
         while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])!
+            let left = Double(operationsToReduce[0])!
             let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])!
+            let right = Double(operationsToReduce[2])!
             
-            let result: Int
+            let result: Double
             switch operand {
             case "+": result = addition(number1: left, number2: right)
             case "-": result = substraction(number1: left, number2: right)
             default: fatalError("Unknown operator !")
             }
-            
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
             operationsToReduce.insert("\(result)", at: 0)
         }
+        let around = Double(operationsToReduce[0])!
+        operationsToReduce[0] = "\(Double(round(1000*around)/1000))"
         return operationsToReduce
     }
-        
-    
-    
-    
-
 }
