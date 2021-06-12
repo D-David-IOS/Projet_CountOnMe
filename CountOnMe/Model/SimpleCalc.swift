@@ -11,52 +11,75 @@ import UIKit
 
 class SimpleCalc {
 
-    var textView = "1+1=2"
+    // contains the current expression
+    var text = "1+1=2"
     
+    // create an array with the current expression
+    // exemple "1 + 1" create an array like ["1"],["+"] ["1"]
     var elements: [String] {
-        return textView.split(separator: " ").map { "\($0)" }
+        return text.split(separator: " ").map { "\($0)" }
     }
 
-    // Error check computed variables
+    // return a boolean
+    // the expression must not finsihed by an operator
     var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/" && elements.last != "="
     }
     
+    // return True if the last operator is /
     var lastOperatorIsDivision: Bool {
         return elements.last == "/"
     }
     
+    // return True if the expression have at least 3 elements
+    // exemple "1 + " is not correct
     var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
     
+    // evalue if the user can add an operator
+    // return False if the last element is an operator
+    // same if textView is empty or has a result
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/" && elements.last != "=" && !expressionHaveResult && textView != ""
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/" && elements.last != "=" && !expressionHaveResult && text != ""
     }
 
+    // return True if the last element is "="
     var expressionHaveResult: Bool {
-        return textView.firstIndex(of: "=") != nil
+        return text.firstIndex(of: "=") != nil
     }
 
+    // addition with 2 numbers
     func addition(number1: Double, number2: Double) -> Double {
         return number1 + number2
     }
     
+    // subtraction with 2 numbers
     func substraction(number1: Double, number2: Double) -> Double {
         return number1 - number2
     }
     
+    // multiplication with 2 numbers
     func multiplication(number1: Double, number2: Double) -> Double {
         return number1 * number2
     }
     
+    // division with 2 numbers
     func division(number1: Double, number2: Double) -> Double {
         return number1 / number2
     }
     
+    // when the user tap egal this function is called
+    // first, the function will start at the end of the array
+    // transform ["1"]["+"]["1"]["x"]["3"] into ["1"]["+"]["3"]
+    // secondly transform ["1"]["+"]["3"] into ["4"]
     func reduceToResult(array: [String]) -> [String]{
         var operationsToReduce = array
         
+        // starts at the end of the array
+        // transform all multiplication and divide into a result
+        // delete the index, and the right number in the array
+        // and insert the result in the left number
         for index in stride(from: operationsToReduce.count-2, to: 0, by: -1){
             if operationsToReduce[index] == "x" || operationsToReduce[index] == "/"{
                 
@@ -68,8 +91,7 @@ class SimpleCalc {
                 switch operand {
                 case "x": result = multiplication(number1: left, number2: right)
                 case "/": result = division(number1: left, number2: right)
-                default:
-                    fatalError("Unknown operator !")
+                default: fatalError("Unknown operator !")
                 }
 
                 operationsToReduce.remove(at: index+1)
@@ -80,6 +102,7 @@ class SimpleCalc {
             }
         }
         
+        // the second step transform all addition and substraction into a result
         while operationsToReduce.count > 1 {
             let left = Double(operationsToReduce[0])!
             let operand = operationsToReduce[1]

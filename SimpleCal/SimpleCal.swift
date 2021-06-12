@@ -13,6 +13,7 @@ var simple = SimpleCalc()
 
 class SimpleCal: XCTestCase {
     
+    // test all Operator with 2 randoms numbers
     func testAllOperator(){
         for _ in 0...10 {
             let dRandom1 = Double.random(in: -99999.0...99999.0)
@@ -32,14 +33,15 @@ class SimpleCal: XCTestCase {
         }
     }
     
+    // test the function reduceToResult with 2 exemple
     func testTotalReduce() {
-        simple.textView = "7.0 x 17.0 / 18.0 + 12.0"
+        simple.text = "7.0 x 17.0 / 18.0 + 12.0"
         let result = simple.reduceToResult(array: simple.elements)
         let a : Double!
         a = 7.0 * 17.0 / 18.0 + 12.0
         XCTAssertEqual( String(Double(round(1000*(a))/1000)) , result[0])
 
-        simple.textView = "7.0 - 17.0 x 18.0 / 12.0"
+        simple.text = "7.0 - 17.0 x 18.0 / 12.0"
         let result1 = simple.reduceToResult(array: simple.elements)
         let a1 : Double!
         a1 = 7.0 - 17.0 * 18.0 / 12.0
@@ -47,89 +49,88 @@ class SimpleCal: XCTestCase {
     }
     
     func testGivenExpressionFinishedByOperatorOrNothing_whenAddOperator_thenReturnfalse(){
-        simple.textView = "7.1 + "
+        simple.text = "7.1 + "
         XCTAssertFalse(simple.canAddOperator)
-        simple.textView = "7.1 - "
+        simple.text = "7.1 - "
         XCTAssertFalse(simple.canAddOperator)
-        simple.textView = "7.1 x "
+        simple.text = "7.1 x "
         XCTAssertFalse(simple.canAddOperator)
-        simple.textView = "7.1 / "
+        simple.text = "7.1 / "
         XCTAssertFalse(simple.canAddOperator)
-        simple.textView = "9.0 + 8.0 ="
+        simple.text = "9.0 + 8.0 ="
         XCTAssertFalse(simple.canAddOperator)
-        simple.textView = ""
+        // Nothing
+        simple.text = ""
         XCTAssertFalse(simple.canAddOperator)
     }
     
     func testGivenExpressionNotFinishedByOperator_whenAddOperator_thenReturnTrue(){
-        simple.textView = "7.1"
+        simple.text = "7.1"
         XCTAssertTrue(simple.canAddOperator)
-        simple.textView = "7.1 - 8.6"
+        simple.text = "7.1 - 8.6"
         XCTAssertTrue(simple.canAddOperator)
-        simple.textView = "7.1 x 8.0"
+        simple.text = "7.1 x 8.0"
         XCTAssertTrue(simple.canAddOperator)
-        simple.textView = "7.1 / 8.9"
+        simple.text = "7.1 / 8.9"
         XCTAssertTrue(simple.canAddOperator)
     }
     
     func testGivenCorrectExpression_whenEvalueIfCorrect_thenReturnTrue(){
-        simple.textView = "7.1"
+        simple.text = "7.1"
         XCTAssertTrue(simple.expressionIsCorrect)
-        simple.textView = "7.1 - 8.6"
+        simple.text = "7.1 - 8.6"
         XCTAssertTrue(simple.expressionIsCorrect)
-        simple.textView = "7.1 x 8.0"
+        simple.text = "7.1 x 8.0"
         XCTAssertTrue(simple.expressionIsCorrect)
-        simple.textView = "7.1 / 8.9 - 7.0 x 8.0 / 7.0"
+        simple.text = "7.1 / 8.9 - 7.0 x 8.0 / 7.0"
         XCTAssertTrue(simple.expressionIsCorrect)
     }
     
     func testGivenIncorrectExpression_whenEvalueIfIncorrect_thenReturnFalse(){
-        simple.textView = "7.1 - "
+        simple.text = "7.1 - "
         XCTAssertFalse(simple.expressionIsCorrect)
-        simple.textView = "7.1 ="
+        simple.text = "7.1 ="
         XCTAssertFalse(simple.expressionIsCorrect)
-        simple.textView = "7.1 +"
+        simple.text = "7.1 +"
         XCTAssertFalse(simple.expressionIsCorrect)
-        simple.textView = "7.1 / 8.9 - 7.0 x "
+        simple.text = "7.1 / 8.9 - 7.0 x "
         XCTAssertFalse(simple.expressionIsCorrect)
     }
     
     func testGivenEnoughExpression_whenEvalueCorrect_thenReturnTrue(){
-        simple.textView = "7.1 - 8.0"
+        simple.text = "7.1 - 8.0"
         XCTAssertTrue(simple.expressionHaveEnoughElement)
-        simple.textView = "7.1 + 8.0 x 2.0"
+        simple.text = "7.1 + 8.0 x 2.0"
         XCTAssertTrue(simple.expressionHaveEnoughElement)
-        simple.textView = "7.1 + 8.0 x 2.0 - 8.0 x 2.0 / 8.0 x 2.0"
+        simple.text = "7.1 + 8.0 x 2.0 - 8.0 x 2.0 / 8.0 x 2.0"
         XCTAssertTrue(simple.expressionHaveEnoughElement)
     }
     
     func testGivenNotEnoughExpression_whenEvalueIncorrect_thenReturnFalse(){
-        simple.textView = "7.1"
+        simple.text = "7.1"
         XCTAssertFalse(simple.expressionHaveEnoughElement)
-        simple.textView = "7.1 + "
+        simple.text = "7.1 + "
         XCTAssertFalse(simple.expressionHaveEnoughElement)
-        simple.textView = ""
+        simple.text = ""
         XCTAssertFalse(simple.expressionHaveEnoughElement)
     }
     
     func testGivenExpressionFinishByDiv_whenEvalueCorrect_thenReturnTrue(){
-        simple.textView = "7.1 /"
+        simple.text = "7.1 /"
         XCTAssertTrue(simple.lastOperatorIsDivision)
-        simple.textView = "7.1 + 8.0 /"
+        simple.text = "7.1 + 8.0 /"
         XCTAssertTrue(simple.lastOperatorIsDivision)
-        simple.textView = "2.0 + 3.0 x 3.0 /"
+        simple.text = "2.0 + 3.0 x 3.0 /"
         XCTAssertTrue(simple.lastOperatorIsDivision)
     }
     
     func testGivenExpressionNotFinishByDiv_whenEvalueIncorrect_thenReturnFalse(){
-        simple.textView = "7.1 +"
+        simple.text = "7.1 +"
         XCTAssertFalse(simple.lastOperatorIsDivision)
-        simple.textView = "7.1 + 8.0"
+        simple.text = "7.1 + 8.0"
         XCTAssertFalse(simple.lastOperatorIsDivision)
-        simple.textView = "2.0 + 3.0 x 3.0 x"
+        simple.text = "2.0 + 3.0 x 3.0 x"
         XCTAssertFalse(simple.lastOperatorIsDivision)
     }
-    
-    
-    
+
 }
